@@ -6,6 +6,6 @@ const path = 'invoice';
 
 router.post(`/${path}/create`, invoiceController.createInvoice);
 router.post(`/${path}/getById`, invoiceController.getInvoiceById);
-router.get(`/${path}/list`, invoiceController.getInvoiceList);
+router.post(`/${path}/list`, invoiceController.getInvoiceList);
 
 module.exports = router;

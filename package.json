@@ -2,6 +2,10 @@
   "dependencies": {
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
+    "jsreport": "^4.10.1",
+    "jsreport-core": "^2.10.1",
+    "jsreport-handlebars": "^2.1.0",
+    "jsreport-pdf-utils": "^1.11.1",
     "pg": "^8.16.3"
   },
   "name": "invoice_pdf_jsreport",
