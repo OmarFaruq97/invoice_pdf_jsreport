@@ -1,17 +1,19 @@
 {
   "dependencies": {
-    "express": "^5.1.0"
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "pg": "^8.16.3"
   },
   "name": "invoice_pdf_jsreport",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "devDependencies": {},
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  },
   "scripts": {
-  "start": "nodemon server.js",
-  "test": "jest --watchAll"
-}
-,
+    "start": "nodemon app.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/OmarFaruq97/invoice_pdf_jsreport.git"
