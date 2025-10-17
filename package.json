@@ -1,0 +1,25 @@
+{
+  "dependencies": {
+    "express": "^5.1.0"
+  },
+  "name": "invoice_pdf_jsreport",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+  "start": "nodemon server.js",
+  "test": "jest --watchAll"
+}
+,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OmarFaruq97/invoice_pdf_jsreport.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/OmarFaruq97/invoice_pdf_jsreport/issues"
+  },
+  "homepage": "https://github.com/OmarFaruq97/invoice_pdf_jsreport#readme"
+}
