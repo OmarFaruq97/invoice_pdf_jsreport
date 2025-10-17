@@ -1,4 +1,4 @@
-<h1>Invoice: {{invoice.invoice_no}}</h1>
+<!-- <h1>Invoice: {{invoice.invoice_no}}</h1>
 <p>Customer: {{invoice.customer_name}}</p>
 <p>Date: {{invoice.invoice_date}}</p>
 
@@ -20,5 +20,29 @@
       <td>{{total}}</td>
     </tr>
     {{/each}}
+  </tbody>
+</table> -->
+
+
+<h1>Invoice: {{invoice.invoice_no}}</h1>
+<p>Customer: {{invoice.customer_name}}</p>
+<p>Date: {{invoice.invoice_date}}</p>
+
+<table border="1" cellpadding="5" cellspacing="0">
+  <thead>
+    <tr>
+      <th>Product</th>
+      <th>Quantity</th>
+      <th>Price</th>
+      <th>Total</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>{{invoice.product_name}}</td>
+      <td>{{invoice.quantity}}</td>
+      <td>{{invoice.price}}</td>
+      <td>{{invoice.total}}</td>
+    </tr>
   </tbody>
 </table>
