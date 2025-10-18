@@ -1,132 +1,80 @@
-// const fs = require('fs').promises; // Use promise-based FS
-// const path = require('path');
-// const jsreport = require('../service/jsreportServer');
-// const DBCRUDService = require('../service/DBCRUDService');
-// const ResponseHandler = require('../utils/responseHandler');
-// const json2xls = require('json2xls');
-// const { Parser } = require('json2csv');
+const fs = require('fs');
+const path = require('path');
+const jsreport = require('../service/jsreportServer');
+const DBCRUDService = require('../service/DBCRUDService');
+const ResponseHandler = require('../utils/responseHandler');
+const json2xls = require('json2xls');
+const { Parser } = require('json2csv');
 
-// const salesService = new DBCRUDService('public', 'proc_sales_history_crud');
+const salesService = new DBCRUDService('public', 'proc_sales_history_crud');
 
-// // Supported formats for validation
-// const SUPPORTED_FORMATS = ['pdf', 'xls', 'csv'];
+// PDF Report (unchanged)
+exports.generatePDFReport = async (req, res) => {
+    try {
+        const { start_date, end_date } = req.body;
+        const result = await salesService.getList({ action_mode: 'getList', start_date, end_date });
+        const data = result.data || [];
 
-// exports.generateReport = async (req, res) => {
-//     try {
-//         const { start_date, end_date, format = 'pdf' } = req.body;
+        const templatePath = path.join(__dirname, '../templates/salesHistoryReport/salesHistoryReport.html');
+        const templateContent = fs.readFileSync(templatePath, 'utf8');
 
-//         // Input validation
-//         if (!start_date || !end_date) {
-//             return ResponseHandler.error(res, 'Start date and end date are required', 400);
-//         }
+        const reportData = { start_date, end_date, sales: data };
 
-//         if (!SUPPORTED_FORMATS.includes(format)) {
-//             return ResponseHandler.error(res, `Unsupported format. Supported: ${SUPPORTED_FORMATS.join(', ')}`, 400);
-//         }
+        const resp = await jsreport.render({
+            template: { content: templateContent, engine: 'handlebars', recipe: 'chrome-pdf' },
+            data: reportData
+        });
 
-//         const spParams = {
-//             action_mode: 'getList',
-//             start_date,
-//             end_date
-//         };
+        const fileName = `SalesHistory_${Date.now()}.pdf`;
+        res.setHeader('Content-disposition', `attachment; filename="${fileName}"`);
+        res.setHeader('Content-type', 'application/pdf');
+        resp.stream.pipe(res);
 
-//         const result = await salesService.getList(spParams);
-//         const data = result.data || [];
+    } catch (err) {
+        ResponseHandler.error(res, err.message);
+    }
+};
 
-//         // Check if data is available
-//         if (data.length === 0) {
-//             return ResponseHandler.error(res, 'No data found for the specified date range', 404);
-//         }
+// XLS Report (stream directly, no temp file)
+exports.generateXLSReport = async (req, res) => {
+    try {
+        const { start_date, end_date } = req.body;
+        const result = await salesService.getList({ action_mode: 'getList', start_date, end_date });
+        const data = result.data || [];
 
-//         const timestamp = Date.now();
-        
-//         switch (format) {
-//             case 'pdf':
-//                 await generatePDFReport(res, data, start_date, end_date, timestamp);
-//                 break;
-                
-//             case 'xls':
-//                 await generateXLSReport(res, data, timestamp);
-//                 break;
-                
-//             case 'csv':
-//                 await generateCSVReport(res, data, timestamp);
-//                 break;
-//         }
+        const xlsData = json2xls(data);
 
-//     } catch (err) {
-//         console.error('Report generation error:', err);
-//         ResponseHandler.error(res, err.message);
-//     }
-// };
+        const fileName = `SalesHistory_${Date.now()}.xlsx`;
+        res.setHeader('Content-disposition', `attachment; filename="${fileName}"`);
+        res.setHeader('Content-type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        res.send(xlsData);
 
-// // PDF Generation Function
-// async function generatePDFReport(res, data, startDate, endDate, timestamp) {
-//     try {
-//         const templatePath = path.join(__dirname, '../templates/salesHistoryReport/salesHistoryReport.html');
-//         const templateContent = await fs.readFile(templatePath, 'utf8');
-        
-//         const reportData = { 
-//             start_date: startDate, 
-//             end_date: endDate, 
-//             sales: data,
-//             generated_at: new Date().toLocaleString()
-//         };
+    } catch (err) {
+        ResponseHandler.error(res, err.message);
+    }
+};
 
-//         const resp = await jsreport.render({
-//             template: {
-//                 content: templateContent,
-//                 engine: 'handlebars',
-//                 recipe: 'chrome-pdf'
-//             },
-//             data: reportData
-//         });
+// CSV Report (stream directly)
+exports.generateCSVReport = async (req, res) => {
+    try {
+        const { start_date, end_date } = req.body;
+        const result = await salesService.getList({ action_mode: 'getList', start_date, end_date });
+        const data = result.data || [];
 
-//         const fileName = `SalesHistory_${timestamp}.pdf`;
-//         res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
-//         res.setHeader('Content-Type', 'application/pdf');
-        
-//         resp.stream.pipe(res);
+        const csvData = new Parser().parse(data);
 
-//     } catch (error) {
-//         throw new Error(`PDF generation failed: ${error.message}`);
-//     }
-// }
+        const fileName = `SalesHistory_${Date.now()}.csv`;
+        res.setHeader('Content-disposition', `attachment; filename="${fileName}"`);
+        res.setHeader('Content-type', 'text/csv');
+        res.send(csvData);
 
-// // XLS Generation Function
-// async function generateXLSReport(res, data, timestamp) {
-//     try {
-//         const xlsData = json2xls(data);
-//         const fileName = `SalesHistory_${timestamp}.xlsx`;
-        
-//         res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
-//         res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-//         res.send(xlsData);
-
-//     } catch (error) {
-//         throw new Error(`XLS generation failed: ${error.message}`);
-//     }
-// }
-
-// // CSV Generation Function
-// async function generateCSVReport(res, data, timestamp) {
-//     try {
-//         // Customize CSV fields if needed
-//         const fields = Object.keys(data[0] || {});
-//         const parser = new Parser({ fields });
-//         const csv = parser.parse(data);
-        
-//         const fileName = `SalesHistory_${timestamp}.csv`;
-//         res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
-//         res.setHeader('Content-Type', 'text/csv; charset=utf-8');
-//         res.send('\uFEFF' + csv); // BOM for Excel compatibility
-
-//     } catch (error) {
-//         throw new Error(`CSV generation failed: ${error.message}`);
-//     }
-// }
+    } catch (err) {
+        ResponseHandler.error(res, err.message);
+    }
+};
 
 
+/* 
 const fs = require('fs');
 const path = require('path');
 const jsreport = require('../service/jsreportServer');
@@ -193,3 +141,4 @@ exports.generateReport = async (req, res) => {
         ResponseHandler.error(res, err.message);
     }
 };
+*/
