@@ -6,9 +6,8 @@ const ResponseHandler = require('../utils/responseHandler');
 const invoiceService = new DBCRUDService('public', 'proc_invoice_crud');
 
 
-exports.createInvoice = async (req, res) => {
+exports.create = async (req, res) => {
     const data = { ...req.body, action_mode: 'insert' };
-
 
     try {
         const validationError = invoiceValidation.validate(data);
@@ -21,7 +20,7 @@ exports.createInvoice = async (req, res) => {
     }
 };
 
-exports.getInvoiceById = async (req, res) => {
+exports.getById = async (req, res) => {
     const data = { action_mode: 'getById', invoice_id: req.body.id };
 
     try {
@@ -32,7 +31,7 @@ exports.getInvoiceById = async (req, res) => {
     }
 };
 
-exports.getInvoiceList = async (req, res) => {
+exports.getList = async (req, res) => {
     const data = { action_mode: 'getList' };
 
     try {

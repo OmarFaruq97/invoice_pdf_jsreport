@@ -5,9 +5,9 @@ const invoicePDFController = require('../controllers/invoicePDFController');
 
 const path = 'invoice';
 
-router.post(`/${path}/create`, invoiceController.createInvoice);
-router.post(`/${path}/getById`, invoiceController.getInvoiceById);
-router.post(`/${path}/list`, invoiceController.getInvoiceList);
+router.post(`/${path}/create`, invoiceController.create);
+router.post(`/${path}/getById`, invoiceController.getById);
+router.post(`/${path}/list`, invoiceController.getList);
 
 // PDF route
 router.post('/invoice/pdf', invoicePDFController.generateInvoicePDF);
