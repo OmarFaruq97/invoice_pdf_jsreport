@@ -8,6 +8,8 @@ const path = 'invoice';
 router.post(`/${path}/create`, invoiceController.create);
 router.post(`/${path}/getById`, invoiceController.getById);
 router.post(`/${path}/list`, invoiceController.getList);
+router.post(`/${path}/update`, invoiceController.update);
+router.post(`/${path}/delete`, invoiceController.delete);
 
 // PDF route
 router.post('/invoice/pdf', invoicePDFController.generateInvoicePDF);

@@ -1,20 +1,20 @@
 const DBCRUDService = require('../service/DBCRUDService');
-const invoiceValidation = require('../validations/invoiceValidation');
 const ResponseHandler = require('../utils/responseHandler');
+const salesHistoryValidation = require('../validations/salesHistoryValidation');
 
 // Stored procedure service
-const invoiceService = new DBCRUDService('public', 'proc_invoice_crud');
+const salesService = new DBCRUDService('public', 'proc_sales_history_crud');
 
 exports.create = async (req, res) => {
     const data = { ...req.body, action_mode: 'insert' };
 
     try {
         // Validate input
-        const validationError = invoiceValidation.validate(data);
+        const validationError = salesHistoryValidation.validate(data);
         if (validationError) return ResponseHandler.error(res, validationError);
 
         // Call SP
-        const result = await invoiceService.create(data);
+        const result = await salesService.create(data);
 
         
         res.json(result);
@@ -24,11 +24,11 @@ exports.create = async (req, res) => {
 };
 
 exports.getById = async (req, res) => {
-    const data = { action_mode: 'getById', invoice_id: req.body.id };
+    const data = { action_mode: 'getById', sale_id: req.body.id };
 
     try {
-        const result = await invoiceService.getById(data);
-        res.json(result); // SP result direct
+        const result = await salesService.getById(data);
+        ResponseHandler.success(res, result);
     } catch (err) {
         ResponseHandler.error(res, err.message);
     }
@@ -38,7 +38,18 @@ exports.getList = async (req, res) => {
     const data = { action_mode: 'getList' };
 
     try {
-        const result = await invoiceService.getList(data);
+        const result = await salesService.getList(data);
+        ResponseHandler.success(res, result);
+    } catch (err) {
+        ResponseHandler.error(res, err.message);
+    }
+};
+
+exports.update = async (req, res) => {
+    const data = { ...req.body, action_mode: 'update' };
+
+    try {
+        const result = await salesService.update(data);
         ResponseHandler.success(res, result);
     } catch (err) {
         ResponseHandler.error(res, err.message);
@@ -46,22 +57,10 @@ exports.getList = async (req, res) => {
 };
 
 exports.delete = async (req, res) => {
-    const data = { action_mode: 'delete', product_id: req.body.id };
+    const data = { action_mode: 'delete', sale_id: req.body.id };
 
     try {
-        const result = await productService.delete(data);
-        ResponseHandler.success(res, result);
-    } catch (err) {
-        ResponseHandler.error(res, err.message);
-    }
-};
-
-
-exports.update = async (req, res) => {
-    const data = { ...req.body, action_mode: 'update' };
-
-    try {
-        const result = await productService.update(data);
+        const result = await salesService.delete(data);
         ResponseHandler.success(res, result);
     } catch (err) {
         ResponseHandler.error(res, err.message);
