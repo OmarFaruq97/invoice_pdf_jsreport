@@ -5,6 +5,7 @@ const ErrorHandler = require("../utils/errorHandler");
 const invoiceRoute = require("./invoiceRoute");
 const invoiceHistoryRoute = require("./salesHistoryRoute");
 
+
 const route = (app) => {
 
   // Static files

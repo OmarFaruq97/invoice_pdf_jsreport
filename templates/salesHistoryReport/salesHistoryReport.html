@@ -1,0 +1,71 @@
+<!-- salesHistoryReport.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sales History Report</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    h1 {
+      text-align: center;
+    }
+    p {
+      margin: 5px 0;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+    th, td {
+      border: 1px solid #333;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+  </style>
+</head>
+<body>
+  <h1>Sales History Report</h1>
+  <p>From: {{start_date}} &nbsp;&nbsp; To: {{end_date}}</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Sale ID</th>
+        <th>Product</th>
+        <th>Customer ID</th>
+        <th>Quantity</th>
+        <th>Price</th>
+        <th>Total</th>
+        <th>Sale Date</th>
+        <th>Payment</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each sales}}
+        <tr>
+          <td>{{@indexPlusOne}}</td>
+          <td>{{sale_id}}</td>
+          <td>{{product_name}}</td>
+          <td>{{customer_id}}</td>
+          <td>{{quantity}}</td>
+          <td>{{price}}</td>
+          <td>{{total_amount}}</td>
+          <td>{{sale_date}}</td>
+          <td>{{payment_method}}</td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</body>
+</html>
