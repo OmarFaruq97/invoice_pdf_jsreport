@@ -6,16 +6,16 @@ const ResponseHandler = require('../utils/responseHandler');
 const invoiceService = new DBCRUDService('public', 'proc_invoice_crud');
 
 
-
 exports.createInvoice = async (req, res) => {
     const data = { ...req.body, action_mode: 'insert' };
 
-    const validationError = invoiceValidation.validate(data);
-    if (validationError) return ResponseHandler.error(res, validationError);
 
     try {
+        const validationError = invoiceValidation.validate(data);
+        if (validationError) return ResponseHandler.error(res, validationError);
+
         const result = await invoiceService.create(data);
-        ResponseHandler.success(res, result, 'Invoice created successfully');
+        res.json(result);
     } catch (err) {
         ResponseHandler.error(res, err.message);
     }
