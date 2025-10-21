@@ -1,3 +1,5 @@
+//routes/salesHistoryRoute.js
+
 const express = require('express');
 const router = express.Router();
 const invoiceHistoryController = require('../controllers/salesHistoryController');

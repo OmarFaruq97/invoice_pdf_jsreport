@@ -4,6 +4,7 @@ const ErrorHandler = require("../utils/errorHandler");
 // Import routes
 const invoiceRoute = require("./invoiceRoute");
 const invoiceHistoryRoute = require("./salesHistoryRoute");
+const pqRoute = require("./pqRoute");
 
 
 const route = (app) => {
@@ -16,6 +17,10 @@ const route = (app) => {
   // API routes
   app.use(apiPath, invoiceRoute);
   app.use(apiPath, invoiceHistoryRoute);
+  app.use(apiPath, pqRoute);
+
+
+
 
   // 404 handler (catch-all)
   app.use((req, res, next) => {

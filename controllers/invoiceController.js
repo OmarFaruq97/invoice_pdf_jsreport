@@ -5,6 +5,69 @@ const ResponseHandler = require('../utils/responseHandler');
 // Stored procedure service
 const invoiceService = new DBCRUDService('public', 'proc_invoice_crud');
 
+// Create new Invoice
+exports.create = async (req, res) => {
+    try {
+        // Validate input
+        const validationError = invoiceValidation.validate(req.body);
+        if (validationError) return ResponseHandler.error(res, validationError);
+
+        // Call SP - DBCRUDService automatically adds 'action'
+        const result = await invoiceService.create(req.body);
+        ResponseHandler.success(res, result.data, result.msg);
+        
+    } catch (err) {
+        ResponseHandler.error(res, err.message);
+    }
+};
+
+// Update Invoice
+exports.update = async (req, res) => {
+    try {
+        const result = await invoiceService.update(req.body);
+        ResponseHandler.success(res, result.data, result.msg);
+    } catch (err) {
+        ResponseHandler.error(res, err.message);
+    }
+};
+
+// Delete Invoice
+exports.delete = async (req, res) => {
+    try {
+        const result = await invoiceService.delete({ invoice_id: req.body.id });
+        ResponseHandler.success(res, result.data, result.msg);
+    } catch (err) {
+        ResponseHandler.error(res, err.message);
+    }
+};
+
+// Get Invoice by ID
+exports.getById = async (req, res) => {
+    try {
+        const result = await invoiceService.getById({ invoice_id: req.body.id });
+        ResponseHandler.success(res, result.data, result.msg);
+    } catch (err) {
+        ResponseHandler.error(res, err.message);
+    }
+};
+
+// Get Invoice list
+exports.getList = async (req, res) => {
+    try {
+        const result = await invoiceService.getList(req.body);
+        ResponseHandler.success(res, result.data, result.msg);
+    } catch (err) {
+        ResponseHandler.error(res, err.message);
+    }
+};
+
+/*const DBCRUDService = require('../service/DBCRUDService');
+const invoiceValidation = require('../validations/invoiceValidation');
+const ResponseHandler = require('../utils/responseHandler');
+
+// Stored procedure service
+const invoiceService = new DBCRUDService('public', 'proc_invoice_crud');
+
 exports.create = async (req, res) => {
     const data = { ...req.body, action_mode: 'insert' };
 
@@ -66,4 +129,4 @@ exports.update = async (req, res) => {
     } catch (err) {
         ResponseHandler.error(res, err.message);
     }
-};
+};*/
