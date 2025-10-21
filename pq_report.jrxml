@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" 
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+              xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports 
+              http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" 
+              name="pq_report" pageWidth="595" pageHeight="842" 
+              columnWidth="555" leftMargin="20" rightMargin="20" 
+              topMargin="20" bottomMargin="20">
+
+    <!-- Parameters -->
+    <parameter name="REPORT_TITLE" class="java.lang.String"/>
+    <parameter name="START_DATE" class="java.lang.String"/>
+    <parameter name="END_DATE" class="java.lang.String"/>
+    <parameter name="GENERATED_AT" class="java.lang.String"/>
+    <parameter name="GRAND_TOTAL" class="java.lang.Double"/>
+    <parameter name="TOTAL_RECORDS" class="java.lang.Integer"/>
+
+    <!-- Fields -->
+    <field name="pq_id" class="java.lang.Integer"/>
+    <field name="pq_date" class="java.lang.String"/>
+    <field name="customer_name" class="java.lang.String"/>
+    <field name="product_name" class="java.lang.String"/>
+    <field name="quantity" class="java.lang.Integer"/>
+    <field name="price" class="java.lang.Double"/>
+    <field name="total_amount" class="java.lang.Double"/>
+    <field name="created_at" class="java.lang.String"/>
+
+    <!-- Variable for serial number -->
+    <variable name="SERIAL_NUMBER" class="java.lang.Integer" calculation="Count">
+        <variableExpression><![CDATA[$F{pq_id}]]></variableExpression>
+        <initialValueExpression><![CDATA[0]]></initialValueExpression>
+    </variable>
+
+    <!-- Title Band -->
+    <title>
+        <band height="100">
+            <staticText>
+                <reportElement x="0" y="0" width="555" height="30"/>
+                <textElement textAlignment="Center">
+                    <font size="18" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Purchase Quotation Report]]></text>
+            </staticText>
+            
+            <textField>
+                <reportElement x="0" y="35" width="555" height="20"/>
+                <textElement textAlignment="Center">
+                    <font size="12"/>
+                </textElement>
+                <textFieldExpression>
+                    <![CDATA["Period: " + $P{START_DATE} + " to " + $P{END_DATE}]]>
+                </textFieldExpression>
+            </textField>
+            
+            <textField>
+                <reportElement x="0" y="60" width="555" height="20"/>
+                <textElement textAlignment="Center">
+                    <font size="10"/>
+                </textElement>
+                <textFieldExpression>
+                    <![CDATA["Generated on: " + $P{GENERATED_AT} + " | Total Records: " + $P{TOTAL_RECORDS}]]>
+                </textFieldExpression>
+            </textField>
+        </band>
+    </title>
+
+    <!-- Column Header -->
+    <columnHeader>
+        <band height="30">
+            <staticText>
+                <reportElement x="0" y="0" width="40" height="30" backcolor="#E6E6E6"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="10" isBold="true"/>
+                </textElement>
+                <text><![CDATA[#]]></text>
+            </staticText>
+            
+            <staticText>
+                <reportElement x="40" y="0" width="60" height="30" backcolor="#E6E6E6"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="10" isBold="true"/>
+                </textElement>
+                <text><![CDATA[PQ ID]]></text>
+            </staticText>
+            
+            <staticText>
+                <reportElement x="100" y="0" width="80" height="30" backcolor="#E6E6E6"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="10" isBold="true"/>
+                </textElement>
+                <text><![CDATA[PQ Date]]></text>
+            </staticText>
+            
+            <staticText>
+                <reportElement x="180" y="0" width="120" height="30" backcolor="#E6E6E6"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="10" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Customer Name]]></text>
+            </staticText>
+            
+            <staticText>
+                <reportElement x="300" y="0" width="100" height="30" backcolor="#E6E6E6"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="10" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Product Name]]></text>
+            </staticText>
+            
+            <staticText>
+                <reportElement x="400" y="0" width="50" height="30" backcolor="#E6E6E6"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="10" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Qty]]></text>
+            </staticText>
+            
+            <staticText>
+                <reportElement x="450" y="0" width="60" height="30" backcolor="#E6E6E6"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="10" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Price]]></text>
+            </staticText>
+            
+            <staticText>
+                <reportElement x="510" y="0" width="45" height="30" backcolor="#E6E6E6"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="10" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Total]]></text>
+            </staticText>
+        </band>
+    </columnHeader>
+
+    <!-- Detail Band -->
+    <detail>
+        <band height="25">
+            <textField>
+                <reportElement x="0" y="0" width="40" height="25"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="9"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$V{SERIAL_NUMBER}]]></textFieldExpression>
+            </textField>
+            
+            <textField>
+                <reportElement x="40" y="0" width="60" height="25"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="9"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{pq_id}]]></textFieldExpression>
+            </textField>
+            
+            <textField>
+                <reportElement x="100" y="0" width="80" height="25"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="9"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{pq_date}]]></textFieldExpression>
+            </textField>
+            
+            <textField>
+                <reportElement x="180" y="0" width="120" height="25"/>
+                <textElement verticalAlignment="Middle">
+                    <font size="9"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{customer_name}]]></textFieldExpression>
+            </textField>
+            
+            <textField>
+                <reportElement x="300" y="0" width="100" height="25"/>
+                <textElement verticalAlignment="Middle">
+                    <font size="9"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{product_name}]]></textFieldExpression>
+            </textField>
+            
+            <textField>
+                <reportElement x="400" y="0" width="50" height="25"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="9"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{quantity}]]></textFieldExpression>
+            </textField>
+            
+            <textField>
+                <reportElement x="450" y="0" width="60" height="25"/>
+                <textElement textAlignment="Right" verticalAlignment="Middle">
+                    <font size="9"/>
+                </textElement>
+                <textFieldExpression><![CDATA["$" + $F{price}]]></textFieldExpression>
+            </textField>
+            
+            <textField>
+                <reportElement x="510" y="0" width="45" height="25"/>
+                <textElement textAlignment="Right" verticalAlignment="Middle">
+                    <font size="9"/>
+                </textElement>
+                <textFieldExpression><![CDATA["$" + $F{total_amount}]]></textFieldExpression>
+            </textField>
+        </band>
+    </detail>
+
+    <!-- Summary Band -->
+    <summary>
+        <band height="40">
+            <staticText>
+                <reportElement x="300" y="10" width="210" height="20"/>
+                <textElement textAlignment="Right">
+                    <font size="10" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Grand Total:]]></text>
+            </staticText>
+            
+            <textField>
+                <reportElement x="510" y="10" width="45" height="20"/>
+                <textElement textAlignment="Right">
+                    <font size="10" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA["$" + $P{GRAND_TOTAL}]]></textFieldExpression>
+            </textField>
+        </band>
+    </summary>
+</jasperReport>
