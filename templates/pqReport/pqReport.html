@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Purchase Quotation Report</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 25px;
+            color: #000000;
+            background-color: #ffffff;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+            border-bottom: 1px solid #ffffff;
+            padding-bottom: 10px;
+        }
+
+        .header h1 {
+            margin: 0;
+            color: #333;
+            font-size: 22px;
+        }
+
+        .report-info {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0 20px;
+            font-size: 13px;
+            color: #555;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+        }
+
+        th {
+            background-color: #f0f0f0;
+            color: #333;
+            padding: 10px 8px;
+            text-align: left;
+            border: 1px solid #dcdcdc;
+            font-weight: bold;
+        }
+
+        td {
+            padding: 9px 8px;
+            border: 1px solid #000000;
+            color: #fafdff;
+        }
+
+        tr:nth-child(even) {
+            background-color: #fafafa;
+        }
+
+        .total-row {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+
+        .summary-row {
+            background-color: #f9f9f9;
+            font-weight: bold;
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 40px;
+            color: #ffffff;
+            font-style: italic;
+            background-color: #f9f9f9;
+        }
+
+        .footer {
+            margin-top: 25px;
+            text-align: center;
+            font-size: 11px;
+            color: #777;
+            border-top: 1px solid #ddd;
+            padding-top: 10px;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .text-bold {
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <h1>PURCHASE QUOTATION REPORT</h1>
+        <div class="report-info">
+            <div><strong>From:</strong> {{start_date}}</div>
+            <div><strong>To:</strong> {{end_date}}</div>
+            <div><strong>Generated:</strong> {{generated_at}}</div>
+        </div>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>PQ ID</th>
+                <th>Date</th>
+                <th>Customer Name</th>
+                <th>Product Name</th>
+                <th class="text-right">Quantity</th>
+                <th class="text-right">Price</th>
+                <th class="text-right">Total Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each pq_data}}
+            <tr>
+                <td class="text-center">{{this.serial}}</td>
+                <td class="text-center">{{this.pq_id}}</td>
+                <td>{{this.pq_date}}</td>
+                <td>{{this.customer_name}}</td>
+                <td>{{this.product_name}}</td>
+                <td class="text-right">{{this.quantity}}</td>
+                <td class="text-right">${{this.price}}</td>
+                <td class="text-right">${{this.total_amount}}</td>
+            </tr>
+            {{else}}
+            <tr>
+                <td colspan="8" class="no-data">No purchase quotation data found for the selected period</td>
+            </tr>
+            {{/each}}
+        </tbody>
+        <tfoot>
+            <tr class="total-row">
+                <td colspan="6" class="text-right text-bold">Grand Total:</td>
+                <td colspan="2" class="text-right text-bold">${{grand_total}}</td>
+            </tr>
+            <tr class="summary-row">
+                <td colspan="8" class="text-center">
+                    <strong>Total Records: {{total_records}}</strong>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <div class="footer">
+        <p>Generated on {{generated_at}} | This is a computer generated report</p>
+    </div>
+</body>
+
+</html>
