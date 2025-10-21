@@ -13,11 +13,7 @@ router.post(`/${path}/list`, invoiceHistoryController.getList);
 router.post(`/${path}/update`, invoiceHistoryController.update);
 router.post(`/${path}/delete`, invoiceHistoryController.delete);
 
-// PDF route
-// router.post('/salesHistory/pdf', salesHistoryReportController.generateReport);
-
-router.post(`/${path}/pdf`, salesHistoryReportController.generatePDFReport);
-router.post(`/${path}/xls`, salesHistoryReportController.generateXLSReport);
-router.post(`/${path}/csv`, salesHistoryReportController.generateCSVReport);
+// Single endpoint for all report formats
+router.post(`/${path}/report`, salesHistoryReportController.generateReport);
 
 module.exports = router;
