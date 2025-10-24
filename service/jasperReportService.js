@@ -77,7 +77,7 @@ class JasperReportService {
         .fillColor('#34495e')
         .text(`Generated: ${new Date().toLocaleString()}`, 0, currentY, { align: 'right' });
 
-    doc.y = currentY + 15; // Move down after the row
+    doc.y = currentY + 15;
     
     doc.moveDown(0.5);
     
